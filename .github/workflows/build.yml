@@ -15,14 +15,8 @@ jobs:
         run: |
           unzip -o "*.zip"
           sed -i 's/org\.bukkit\.ItemStack/org.bukkit.inventory.ItemStack/g' PrivateBlock/src/main/java/com/example/privateblock/command/PsCommand.java
-          python3 -c '
-          import re
-          p = "PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java"
-          lines = open(p).readlines()
-          lines[19] = re.sub(r"\(([^()]+)\)", r"(\1.getLocation())", lines[19], count=1)
-          open(p, "w").writelines(lines)
-          print("Fixed line 20:", lines[19])
-          '
+          sed -i '20s/\([a-zA-Z0-9_]*\)))/\1.getLocation())))/' PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java
+          sed -n '18,22p' PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
