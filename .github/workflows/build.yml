@@ -15,8 +15,9 @@ jobs:
         run: |
           unzip -o "*.zip"
           sed -i 's/org\.bukkit\.ItemStack/org.bukkit.inventory.ItemStack/g' PrivateBlock/src/main/java/com/example/privateblock/command/PsCommand.java
-          sed -i '20s/\([a-zA-Z0-9_]*\)))/\1.getLocation())))/' PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java
-          sed -n '18,22p' PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java
+          sed -i 's/for (Location loc : event\.blockList())/for (org.bukkit.block.Block b : event.blockList()) { Location loc = b.getLocation();/g' PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java
+          sed -i 's/event\.blockList()\.remove(loc)/event.blockList().remove(b)/g' PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java
+          echo "}" >> PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
