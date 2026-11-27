@@ -16,11 +16,12 @@ jobs:
           unzip -o "*.zip"
           sed -i 's/org\.bukkit\.ItemStack/org.bukkit.inventory.ItemStack/g' PrivateBlock/src/main/java/com/example/privateblock/command/PsCommand.java
           python3 -c '
+          import re
           p = "PrivateBlock/src/main/java/com/example/privateblock/listener/ExplosionListener.java"
           lines = open(p).readlines()
-          lines[19] = lines[19].replace("(block)", "(block.getLocation())").replace("(b)", "(b.getLocation())")
+          lines[19] = re.sub(r"\(([^()]+)\)", r"(\1.getLocation())", lines[19], count=1)
           open(p, "w").writelines(lines)
-          print("Line 20:", lines[19])
+          print("Fixed line 20:", lines[19])
           '
 
       - name: Set up JDK 21
